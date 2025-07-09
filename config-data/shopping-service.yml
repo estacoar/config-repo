@@ -1,30 +1,45 @@
+# config-repo/config-data/shopping-service.yml
+
 server:
-  port: 8093
+  port: 0
 
 spring:
-  application:
-    name: shopping-service
-  cloud:
-    config:
-      enabled: false
-  boot:
-    admin:
-      client:
-        url: http://localhost:8086
+  # DB (Configuración base del DataSource)
+  # Aquí NO defines la URL específica para H2 en memoria, ya que eso es para 'dev'.
+  datasource:
+    # Si shopping-service usa una base de datos, pon un driver y credenciales base.
+    # Si no usa DB, puedes omitir esta sección o dejarla vacía.
+    driver-class-name: org.h2.Driver # Puede ser un driver común si usas H2 para pruebas unitarias
+    username: sa # Usarás variables de entorno/Secrets en producción
+    password: # Dejar vacío o un valor temporal. Usarás variables de entorno/Secrets en producción.
+  # JPA / HIBERNATE (Configuración base)
+  jpa:
+    # Ajusta esto si shopping-service usa JPA/Hibernate
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+  # Spring Boot Actuator (Monitoreo en Producción)
   management:
-    tracing:
-      sampling:
-        probability: 1.0
-  eureka:
-    client:
-      service-url:
-        defaultZone: http://localhost:8761/eureka/
-      register-with-eureka: true
-      fetch-registry: true
-
-  feign:
-    client:
-      config:
-        default:
-          connectTimeout: 5000
-          readTimeout: 5000
+    endpoints:
+      web:
+        exposure:
+          include: "health,info,metrics"
+    metrics:
+      export:
+        datadog:
+          enabled: true
+          api-key: ${DATADOG_API_KEY}
+          application-key: ${DATADOG_APP_KEY}
+          step: 30s
+        prometheus:
+          enabled: false
+# Logging (Configuración base)
+logging:
+  level:
+    root: INFO
+    academy.digitallab.store.shopping: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"

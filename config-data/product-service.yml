@@ -1,0 +1,44 @@
+server:
+  port: 0
+
+spring:
+  # ===============================
+  # DB (Configuración base del DataSource)
+  # La URL específica de H2 en memoria NO va aquí, ya que es para 'dev'.
+  datasource:
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  # ===============================
+  # JPA / HIBERNATE (Configuración base)
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect # O el dialecto de tu DB de producción (ej. PostgreSQLDialect)
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+  # Spring Boot Actuator (Monitoreo en Producción)
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "health,info,metrics" # Exponer solo los endpoints esenciales para monitoreo
+    metrics:
+      export:
+        datadog:
+          enabled: true # Habilita la exportación de métricas a Datadog por defecto
+          api-key: ${DATADOG_API_KEY} # ¡Clave API de Datadog! Usar Secretos de Kubernetes
+          application-key: ${DATADOG_APP_KEY} # ¡Clave de aplicación de Datadog! Usar Secretos de Kubernetes
+          step: 30s # Intervalo de tiempo en que se envían las métricas a Datadog
+        prometheus:
+          enabled: false # Deshabilita Prometheus si usas Datadog para métricas
+
+# Logging (Configuración base)
+logging:
+  level:
+    root: INFO
+    academy.digitallab.store.product: INFO # Ajusta el package de tu servicio de producto
+    org.springframework: WARN
+    org.hibernate: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n" # Patrón de log completo

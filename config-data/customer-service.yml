@@ -1,6 +1,6 @@
 #Application Configuration
 server:
-  port: 8092
+  port: 0
 
 # To See H2 Console in Browser:
 # http://localhost:8092/h2-console
@@ -10,7 +10,7 @@ spring:
     console:
       enabled: true
   # ===============================
-  # DB
+  # DB -
   # ===============================
   datasource:
     url: jdbc:h2:mem:customerDB;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -23,22 +23,15 @@ spring:
   # JPA / HIBERNATE
   # ===============================
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
-        show_sql: true
+        show_sql: false
         use_sql_comments: false
         format_sql: false
-  cloud:
-    config:
-      enabled: false
-  eureka:
-    client:
-      register-with-eureka: false
-      fetch-registry: false
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"

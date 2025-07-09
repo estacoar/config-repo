@@ -1,0 +1,59 @@
+server:
+  port: 0
+
+spring:
+  # DB (Configuración para tu base de datos de PRODUCCIÓN)
+  datasource:
+    url: jdbc:postgresql://${DB_HOST_PROD}:5432/customer_db_prod
+    driverClassName: org.postgresql.Driver
+    username: ${DB_USERNAME_PROD}
+    password: ${DB_PASSWORD_PROD}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  # ===============================
+  # JPA / HIBERNATE
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        show_sql: false
+        use_sql_comments: false
+        format_sql: false
+
+  # ===============================
+  # Spring Boot Actuator (Monitoreo en Producción)
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "health,info,metrics" # Exponer solo los endpoints esenciales para monitoreo
+    metrics:
+      export:
+        datadog:
+          enabled: true # Habilita la exportación de métricas a Datadog
+          api-key: ${DATADOG_API_KEY} # ¡Clave API de Datadog! Usar Secretos de Kubernetes
+          application-key: ${DATADOG_APP_KEY} # ¡Clave de aplicación de Datadog! Usar Secretos de Kubernetes
+            # host: localhost # Por defecto, el agente de Datadog escucha en localhost:8125 (UDP) o 8126 (HTTP)
+            # En Kubernetes, el Pod del agente de Datadog se ejecuta en cada nodo,
+            # y el tráfico local suele ser suficiente. Si necesitas especificar,
+          # usa el nombre de servicio del agente Datadog si lo has configurado así.
+          step: 30s # Intervalo de tiempo en que se envían las métricas a Datadog
+        prometheus:
+          enabled: false # Deshabilita Prometheus si usas Datadog para métricas
+
+# ===============================
+# Logging
+logging:
+  level:
+    root: INFO
+    academy.digitallab.store.customer: INFO
+    org.springframework: WARN
+    org.hibernate: WARN

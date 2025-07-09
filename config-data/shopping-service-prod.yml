@@ -1,0 +1,40 @@
+server:
+  port: 0
+
+spring:
+  # DB (Configuración para tu base de datos de PRODUCCIÓN, si aplica para shopping-service)
+  datasource:
+    url: jdbc:postgresql://${DB_HOST_PROD}:5432/shopping_db_prod # URL real de tu DB de producción
+    username: ${DB_USERNAME_PROD}
+    password: ${DB_PASSWORD_PROD}
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+  # JPA / HIBERNATE (Configuración para PRODUCCIÓN, si aplica)
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: validate # NUNCA 'update' o 'create' en producción
+    database-platform: org.hibernate.dialect.PostgreSQLDialect # El dialecto real de tu DB de producción
+  # Spring Boot Actuator (Monitoreo en Producción)
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "health,info,metrics"
+    metrics:
+      export:
+        datadog:
+          enabled: true
+          api-key: ${DATADOG_API_KEY}
+          application-key: ${DATADOG_APP_KEY}
+          step: 15s
+        prometheus:
+          enabled: false
+# Logging (Configuración para PRODUCCIÓN)
+logging:
+  level:
+    root: INFO
+    academy.digitallab.store.shopping: INFO
+    org.springframework: WARN
+    org.hibernate: WARN
