@@ -2,43 +2,43 @@ server:
   port: 0
 
 spring:
-  # ===============================
-  # DB (Configuración base del DataSource)
-  # La URL específica de H2 en memoria NO va aquí, ya que es para 'dev'.
+  # DB
   datasource:
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-
-  # ===============================
-  # JPA / HIBERNATE (Configuración base)
+    url: jdbc:postgresql://localhost:5432/product_db
+    username: myuser
+    password: mypassword
+    driver-class-name: org.postgresql.Driver
+  # JPA
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect # O el dialecto de tu DB de producción (ej. PostgreSQLDialect)
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: false
     hibernate:
       ddl-auto: none
-  # Spring Boot Actuator (Monitoreo en Producción)
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+  # Spring Boot Actuator
   management:
     endpoints:
       web:
         exposure:
-          include: "health,info,metrics" # Exponer solo los endpoints esenciales para monitoreo
+          include: "health,info,metrics"
     metrics:
       export:
         datadog:
-          enabled: true # Habilita la exportación de métricas a Datadog por defecto
-          api-key: ${DATADOG_API_KEY} # ¡Clave API de Datadog! Usar Secretos de Kubernetes
-          application-key: ${DATADOG_APP_KEY} # ¡Clave de aplicación de Datadog! Usar Secretos de Kubernetes
-          step: 30s # Intervalo de tiempo en que se envían las métricas a Datadog
+          enabled: true
+          api-key: ${DATADOG_API_KEY}
+          application-key: ${DATADOG_APP_KEY}
+          step: 30s
         prometheus:
-          enabled: false # Deshabilita Prometheus si usas Datadog para métricas
-
-# Logging (Configuración base)
+          enabled: false
+# Logging
 logging:
   level:
     root: INFO
-    academy.digitallab.store.product: INFO # Ajusta el package de tu servicio de producto
+    academy.digitallab.store.product: INFO
     org.springframework: WARN
     org.hibernate: WARN
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n" # Patrón de log completo
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
