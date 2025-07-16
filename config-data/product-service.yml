@@ -25,12 +25,6 @@ spring:
         exposure:
           include: "health,info,metrics"
     metrics:
-      export:
-        datadog:
-          enabled: false
-          api-key: ${DATADOG_API_KEY}
-          application-key: ${DATADOG_APP_KEY}
-          step: 30s
         prometheus:
           enabled: false
 # Logging
