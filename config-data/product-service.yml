@@ -27,7 +27,7 @@ spring:
     metrics:
       export:
         datadog:
-          enabled: true
+          enabled: false
           api-key: ${DATADOG_API_KEY}
           application-key: ${DATADOG_APP_KEY}
           step: 30s
