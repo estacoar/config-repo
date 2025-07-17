@@ -2,26 +2,21 @@ server:
   port: 8091
 
 spring:
-  # DB (Configuración para H2 en memoria en desarrollo)
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        trace: false
-        web-allow-others: false
+    url: jdbc:postgresql://localhost:5432/product_db
+    username: myuser
+    password: mypassword
+    driver-class-name: org.postgresql.Driver
 
-  # ===============================
-  # JPA / HIBERNATE (Configuración para desarrollo)
   jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
       ddl-auto: update
-  # Actuator
+
+  flyway:
+    enabled: false
+
   management:
     endpoints:
       web:
@@ -29,10 +24,9 @@ spring:
           include: "*"
     metrics:
       export:
-        datadog:
-          enabled: false
         prometheus:
           enabled: true
+
 logging:
   level:
     org.springframework.boot: DEBUG
