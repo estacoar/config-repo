@@ -33,3 +33,6 @@ spring:
           enabled: false
         prometheus:
           enabled: true
+logging:
+  level:
+    org.springframework.boot: DEBUG
