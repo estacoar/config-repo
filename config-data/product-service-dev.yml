@@ -3,16 +3,16 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/product_db
-    username: myuser
-    password: mypassword
+    url: jdbc:postgresql://shoppingdb-instance-1.cm1se64aqiv2.us-east-1.rds.amazonaws.com:5432/product_db
+    username: estacoar87
+    password: psV$wM338RcSkdN7lY_i4<IUp|nh
     driver-class-name: org.postgresql.Driver
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
 
   flyway:
     enabled: false
