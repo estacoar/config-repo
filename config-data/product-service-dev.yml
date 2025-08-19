@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:postgresql://shoppingdb-instance-1.cm1se64aqiv2.us-east-1.rds.amazonaws.com:5432/product_db
     username: estacoar87
-    password: NGuxH|PfXe<tVlVR8PIw4)vU)52s
+    password: 1F1akWOYC)w]*:ZHJur*f1:jArs!
     driver-class-name: org.postgresql.Driver
 
   jpa:
