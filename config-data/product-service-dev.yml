@@ -3,9 +3,9 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://shoppingdb.cm1se64aqiv2.us-east-1.rds.amazonaws.com:5432/product_db
-    username: estacoar87
-    password: 1F1akWOYC)w]*:ZHJur*f1:jArs!
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -17,15 +17,15 @@ spring:
   flyway:
     enabled: false
 
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: "*"
-    metrics:
-      export:
-        prometheus:
-          enabled: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  metrics:
+    export:
+      prometheus:
+        enabled: true
 
 logging:
   level:
